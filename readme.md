@@ -20,7 +20,7 @@ Wuzzuf's content is rendered using Javascript. That instance, a simple get reque
 
 ## **What Actually The Script Do?**
 
-The script presents a main function called  **scraper** what it actually does that it take the following parameters:
+The script presents a main function called  **scraper**(search_for, pages, keywords) what it actually does that it take the following parameters:
 
 * **Job title** to search for ex: *Data Analyst*, or even it can be more general like *Data* which would return every job title that might be related to  the word data.  
 
