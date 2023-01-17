@@ -13,3 +13,19 @@ In Egypt, due to the current conomic poor situation, many people and talents beg
 
 So, i decided to build a web scraper for wuzzuf's website to scrape all the data about data science related roles. then in a future project i will analyze these data to get insights that might help the data roles seekers in their decision and what skills they should improve to be ready for the market    
 #
+
+## **Why Selenium?**
+Wuzzuf's content is rendered using Javascript. That instance, a simple get request to the URL below would only return the viewable content. We're looking for something more.
+#
+
+## **What Actually The Script Do?**
+
+The script presents a main function called  **scraper** what it actually does that it take the following parameters:
+
+* **Job title** to search for ex: *Data Analyst*, or even it can be more general like *Data* which would return every job title that might be related to  the word data.  
+
+* **No. of pages** to search in 
+
+* **list of keywords** that you are intersted in to be in your job title to extract
+#
+
