@@ -1,8 +1,7 @@
 from selenium import webdriver 
-from webdriver_manager.chrome import ChromeDriverManager
+from selenium.common.exceptions import NoSuchElementException
 import pandas as pd
 import time
-from selenium.webdriver.support.ui import WebDriverWait     
 from selenium.webdriver.common.by import By 
 
 def scraper(search_for,pages,keywords):
@@ -16,20 +15,27 @@ def scraper(search_for,pages,keywords):
 	salaries = []
 	links = []
 	open_positions = []
-	#create driver
+
+	#create a chrome driver
 	options = webdriver.ChromeOptions()
 	options.add_experimental_option('excludeSwitches', ['enable-logging'])
 	driver = webdriver.Chrome(options=options)
 
+	#start iterating through the pages starting from homepage
 	for _ in range(pages):
 		#open url with driver
 		url = f"https://wuzzuf.net/search/jobs/?q={str(search_for)}&start={str(_)}"
 		driver.get(url)
 
-		job_roles = (list(map(get_text, driver.find_elements(By.XPATH, "//h2[@class='css-m604qf']/a"))))
-		
+		try:
+			job_roles = (list(map(get_text, driver.find_elements(By.XPATH, "//h2[@class='css-m604qf']/a"))))
+		except NoSuchElementException:
+			print("no jobs found")
+
 		i = 1
 		links.clear()
+
+		# search job roles that relate to the given keywords
 		for pos in list(map(lambda x: x.lower(), job_roles)):
 			if any(key in pos for key in list(map(lambda x: x.lower(), keywords))) :	
 				job_title.append(driver.find_element(By.XPATH, f"//div[@class='css-1gatmva e1v1l3u10'][{i}]/div[@class='css-pkv5jc']/div[@class='css-laomuu']/h2[@class='css-m604qf']/a[@class='css-o171kl']").text)
@@ -43,10 +49,10 @@ def scraper(search_for,pages,keywords):
 					experience.append("· 0 Yrs of Exp")
 
 				links.append(driver.find_element(By.XPATH, f"//div[@class='css-1gatmva e1v1l3u10'][{i}]/div[@class='css-pkv5jc']/div[@class='css-laomuu']/h2[@class='css-m604qf']/a[@class='css-o171kl']").get_attribute("href"))
-					
+		
 			i+=1	
 	
-			#extract job details(salary)
+		#extract job details(salary, open positions, skills)
 		for _ in range(len(links)):
 			driver.get(links[_])
 			time.sleep(2)
@@ -55,11 +61,20 @@ def scraper(search_for,pages,keywords):
 			skills.append(list(map(get_text, driver.find_elements(By.XPATH, "//div[@class='css-s2o0yh']/a"))))
 
 	#return  pandas data frame
-	data = {"job title":job_title, "company": company, "location": location, "experience": experience, "salaries":salaries, "skills":skills, "job type": job_type,"open postions":open_positions} 
+	data = {"job title":job_title, 
+	"company": company,
+	"location": location,
+	"experience": experience,
+	"salaries":salaries,
+	"skills":skills,
+	"job type": job_type,
+	"open postions":open_positions}
+
 	df = pd.DataFrame(data)
+
 	return df
 	
-
+# get text property from list elements
 def get_text(elem):
 	return elem.text
 
