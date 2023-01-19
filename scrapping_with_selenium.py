@@ -4,8 +4,9 @@ import pandas as pd
 import time
 from selenium.webdriver.common.by import By 
 
-def scraper(search_for,pages,keywords):
+def scraper(search_for , pages, keywords):
 	
+
 	job_title = []
 	company = []
 	location = []
@@ -21,6 +22,7 @@ def scraper(search_for,pages,keywords):
 	options.add_experimental_option('excludeSwitches', ['enable-logging'])
 	driver = webdriver.Chrome(options=options)
 
+	
 	#start iterating through the pages starting from homepage
 	for _ in range(pages):
 		#open url with driver
@@ -69,9 +71,8 @@ def scraper(search_for,pages,keywords):
 	"skills":skills,
 	"job type": job_type,
 	"open postions":open_positions}
-
+	 
 	df = pd.DataFrame(data)
-
 	return df
 	
 # get text property from list elements
