@@ -4,7 +4,7 @@ import pandas as pd
 import time
 from selenium.webdriver.common.by import By 
 
-def scraper(search_for,pages,keywords):
+def scraper(search_for, pages, keywords):
 	
 	job_title = []
 	company = []
