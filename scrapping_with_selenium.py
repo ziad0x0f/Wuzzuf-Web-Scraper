@@ -6,7 +6,6 @@ from selenium.webdriver.common.by import By
 
 def scraper(search_for , pages, keywords):
 	
-
 	job_title = []
 	company = []
 	location = []
@@ -59,23 +58,33 @@ def scraper(search_for , pages, keywords):
 			driver.get(links[_])
 			time.sleep(2)
 			salaries.append(driver.find_element(By.XPATH, "//div[4]/span[@class='css-47jx3m']/span").text)
-			open_positions.append(driver.find_element(By.XPATH, "//div[@class='css-bjn8wh']/div[@class='css-104dl8g']/div[@class='css-1wb134k']/span[@class='css-ixb653']/span[2]").text)
-			skills.append(list(map(get_text, driver.find_elements(By.XPATH, "//div[@class='css-s2o0yh']/a"))))
-
+			open_positions.append(get_number(driver.find_element(By.XPATH, "//div[@class='css-bjn8wh']/div[@class='css-104dl8g']/div[@class='css-1wb134k']/span[@class='css-ixb653']/span").text))
+			
+			# append list of skills per job
+			content = [driver.find_element(By.XPATH,f"//a[@class='css-g65o95'][{i+1}]/span[@class='css-6to1q']/span[@class='css-tt12j1 e12tgh591']/span[@class='css-158icaa']").text for i in range(len(driver.find_elements(By.XPATH,"//div[@class='css-s2o0yh']/a")))]
+			skills.append(content)
+	
 	#return  pandas data frame
-	data = {"job title":job_title, 
+	data = {
+	"job title":job_title, 
 	"company": company,
 	"location": location,
 	"experience": experience,
 	"salaries":salaries,
 	"skills":skills,
 	"job type": job_type,
-	"open postions":open_positions}
-	 
+	"open postions":open_positions
+	}
 	df = pd.DataFrame(data)
+
 	return df
 	
 # get text property from list elements
 def get_text(elem):
 	return elem.text
+
+def get_number(txt):
+	for s in txt.split():
+		if s.isdigit():
+			return int(s)
 
