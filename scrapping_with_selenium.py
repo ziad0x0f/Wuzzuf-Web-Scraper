@@ -36,34 +36,34 @@ def scraper(search_for, pages, keywords):
 		except NoSuchElementException:
 			print("no jobs found")
 
-		i = 1
+		
 		links.clear()
 
 		# search job roles that relate to the given keywords
-		for job in list(map(lambda x: x.lower(), job_roles)):
+		for i, job in enumerate(list(map(lambda x: x.lower(), job_roles))):
 			if any(is_string_similar(job, key, 0.6) for key in list(map(lambda x: x.lower(), keywords))):
 
 				job_title.append(driver
-								.find_element(By.XPATH, f"//div[@class='css-1gatmva e1v1l3u10'][{i}]/div[@class='css-pkv5jc']/div[@class='css-laomuu']/h2[@class='css-m604qf']/a[@class='css-o171kl']")
+								.find_element(By.XPATH, f"//div[@class='css-1gatmva e1v1l3u10'][{i+1}]/div[@class='css-pkv5jc']/div[@class='css-laomuu']/h2[@class='css-m604qf']/a[@class='css-o171kl']")
 								.text)
 				job_type.append(driver
-								.find_element(By.XPATH, f"//div[@class='css-1gatmva e1v1l3u10'][{i}]/div[@class='css-pkv5jc']/div[@class='css-y4udm8']/div[@class='css-1lh32fc']/a[1]/span").text)
+								.find_element(By.XPATH, f"//div[@class='css-1gatmva e1v1l3u10'][{i+1}]/div[@class='css-pkv5jc']/div[@class='css-y4udm8']/div[@class='css-1lh32fc']/a[1]/span").text)
 				company.append(driver
-								.find_element(By.XPATH, f"//div[@class='css-1gatmva e1v1l3u10'][{i}]/div/div[@class='css-laomuu']/div/a").text)
+								.find_element(By.XPATH, f"//div[@class='css-1gatmva e1v1l3u10'][{i+1}]/div/div[@class='css-laomuu']/div/a").text)
 				location.append(driver
-								.find_element(By.XPATH, f"//div[@class='css-1gatmva e1v1l3u10'][{i}]/div/div[@class='css-laomuu']/div/span")
+								.find_element(By.XPATH, f"//div[@class='css-1gatmva e1v1l3u10'][{i+1}]/div/div[@class='css-laomuu']/div/span")
 								.text)
 
 				try:
 					experience.append(driver.find_element(
-					By.XPATH, f"//div[@class='css-1gatmva e1v1l3u10'][{i}]/div[@class='css-pkv5jc']/div[@class='css-y4udm8']/div[2]/span[1]").text)
+					By.XPATH, f"//div[@class='css-1gatmva e1v1l3u10'][{i+1}]/div[@class='css-pkv5jc']/div[@class='css-y4udm8']/div[2]/span[1]").text)
 				except:
 					experience.append("· 0 Yrs of Exp")
 
 				links.append(driver.find_element(
-					By.XPATH, f"//div[@class='css-1gatmva e1v1l3u10'][{i}]/div[@class='css-pkv5jc']/div[@class='css-laomuu']/h2[@class='css-m604qf']/a[@class='css-o171kl']").get_attribute("href"))
+					By.XPATH, f"//div[@class='css-1gatmva e1v1l3u10'][{i+1}]/div[@class='css-pkv5jc']/div[@class='css-laomuu']/h2[@class='css-m604qf']/a[@class='css-o171kl']").get_attribute("href"))
 
-				i += 1
+				
 
 		# extract job details(job_id, salary, open positions, skills)
 		for id, link in enumerate(links):
